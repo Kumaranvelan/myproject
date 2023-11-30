@@ -1,10 +1,8 @@
-// import Person from "./personform";
-
 interface Person  {
   name: string;
   email: string;
   phone: number;
-  website: string; 
+  website: string;
   contact: string;
   number : number;
   another: string;
@@ -14,12 +12,10 @@ interface Person  {
   commission : number;
   date : string;
   logo: string;
-criticalAccountYes:  string[];
-  criticalAccountNo:  string[];
+ criticalAccount:string[];
   payment : string[];
   [key: string]: string | number  | string[] ;
 }
-
 interface FilterProps {
     nameFilter :string;
     setNameFilter :React.Dispatch<React.SetStateAction<string>>;
@@ -32,12 +28,8 @@ interface FilterProps {
     ApplyFilter :(event: React.FormEvent)=> void;
     Backtoform : (event : React.FormEvent)=> void;
     isFilterMode : boolean;
-    FilteredPersons: Person[]; 
-    
+    FilteredPersons: Person[];
 }
-
-
-
 const Filter: React.FC<FilterProps> = ({
     nameFilter,
     setNameFilter,
@@ -51,34 +43,27 @@ const Filter: React.FC<FilterProps> = ({
     Backtoform,
     FilteredPersons,
   }) =>{
-   
-   
-    
   const handleApplyFilter = (event: React.FormEvent) => {
     event.preventDefault(); // Prevent the default form submission behavior
     ApplyFilter(event);
   };
-
   const handleBacktoform = (event: React.FormEvent) => {
     event.preventDefault(); // Prevent the default form submission behavior
     Backtoform(event);
   };
-
    return (
-   
-
 <div>
       {/* Render the filtered persons */}
       <h2>Filtered Persons</h2>
       <ul>
         {FilteredPersons.map((person, index) => (
           <li key={index}>
-            {person.name} - {person.email} - {person.phone}
+            { "NAME:"+person.name} ,
+            {"EMAIL:"+person.email} ,
+            {"PHONENUMBER:"+person.phone}
           </li>
         ))}
       </ul>
-
-
 <form id="filterForm">
         {/* Add filter input elements */}
         {/* <input
@@ -121,14 +106,10 @@ const Filter: React.FC<FilterProps> = ({
           <option value="upi">UPI</option>
           <option value="card">Card on payment</option>
         </select>
-
         <button   onClick={handleApplyFilter}>Apply Filter</button>
         <button onClick={handleBacktoform}>Back to Form</button>
       </form>
-    
       </div>
-    
     )
 }
-
 export default Filter;

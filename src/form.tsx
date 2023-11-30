@@ -1,12 +1,10 @@
-// import React, { useState } from 'react';
-// import React, { useState } from 'react';
-import App from './person';
- 
+//import React, { useState } from 'react';
+import React from "react";
 interface Person  {
   name: string;
   email: string;
   phone: number;
-  website: string; 
+  website: string;
   contact: string;
   number : number;
   another: string;
@@ -16,14 +14,11 @@ interface Person  {
   commission : number;
   date : string;
   logo: string;
-criticalAccountYes:  string[];
-  criticalAccountNo:  string[];
+criticalAccount:  string[];
   payment : string[];
   [key: string]: string | number  | string[] ;
 }
-
 interface FormProps {
-  
   editIndex: number | null;
   editFormData: Person | null;
   handleEditSubmit: (index: number, editedPerson: Person) => void
@@ -33,15 +28,13 @@ interface FormProps {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     field: string
   ) => void;
-  AddPerson: (event: React.FormEvent) => void;
+  // AddPerson: (event: React.FormEvent) => void;
+  handleFormSubmit: (event: React.FormEvent)=>void;
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
-  setCriticalAccountYes: React.Dispatch<React.SetStateAction<boolean>>;
-  setCriticalAccountNo: React.Dispatch<React.SetStateAction<boolean>>;
+  // setCriticalAccount: React.Dispatch<React.SetStateAction<boolean>>;
      setEditIndex:React.Dispatch<React.SetStateAction<number>>;
      setEditFormData:React.Dispatch<React.SetStateAction<string>>;
-   
 }
-
 const Merchant: React.FC<FormProps> = ({
   editIndex,
   editFormData,
@@ -49,41 +42,34 @@ const Merchant: React.FC<FormProps> = ({
   selectedType,
   handleInputChange,
   setSelectedType,
-  setCriticalAccountYes,
-  setCriticalAccountNo,
+  // setCriticalAccount,
   handleEditSubmit,
-  AddPerson,
-
+  handleFormSubmit
 }) => {
-
-
-  // const [criticalAccount, setCriticalAccount] = useState(false);
-
-  
- 
-  const handleFormSubmit = (event: React.FormEvent) => {
-  event.preventDefault();
-
-  if (editIndex !== null) {
-     // For edit operation, directly use formData and pass it to handleEditSubmit
-    handleEditSubmit(editIndex,formData); // Call handleEditSubmit for edit operation with formData
-  } else {
-    AddPerson(event); // Call AddPerson for new person submission
-  }
-};
-
-
-  const handleCriticalAccountYesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCriticalAccountYes(event.target.checked);
-  };
-
-  const handleCriticalAccountNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCriticalAccountNo(event.target.checked);
-  };
- 
-
+//  const handleCriticalAccountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     setCriticalAccount(event.target.checked);
+//   };
+  // const handleFormSubmit = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  //   if (editIndex !== null) {
+  //     handleEditSubmit(editIndex,formData);
+  //   } else {
+  //     AddPerson(event); // Call AddPerson for new person submission
+  //   }
+  //   }
+    // const handleSubmit = async (event:React.FormEvent) => {
+    //   event.preventDefault();
+    //   try {
+    //     // Make a POST request to your backend endpoint
+    //     const response = await axios.post('http://localhost:3005/', formData);
+    //     // Handle the response, update state, etc.
+    //     console.log('Data sent successfully:', response.data);
+    //   } catch (error) {
+    //     // Handle errors (e.g., network error, server error)
+    //     console.error('Error sending data:', error);
+    //   }
+    // };
   return (
-    
 <div>
     <h1 className='head' >Merchant Form</h1>
     <form id="myForm" onSubmit={handleFormSubmit}>
@@ -143,7 +129,7 @@ const Merchant: React.FC<FormProps> = ({
         value={formData.another}
         onChange={(event) => {
           setSelectedType(event.target.value);
-          handleInputChange(event, "another"); 
+          handleInputChange(event, "another");
         }}
       />
       <label>Notes</label>
@@ -162,7 +148,7 @@ const Merchant: React.FC<FormProps> = ({
        checked={selectedType === "small business"}
         onChange={(event) => {
           setSelectedType(event.target.value);
-          handleInputChange(event, "type"); 
+          handleInputChange(event, "type");
         }}
       />
       <label>Entreprise</label>
@@ -181,7 +167,6 @@ const Merchant: React.FC<FormProps> = ({
         type="radio"
         name="type"
         value="Entreprenuer"
-        
         checked={selectedType === "Entreprenuer"}
         onChange={(event) => {
           setSelectedType(event.target.value); // Update the selected type
@@ -190,6 +175,7 @@ const Merchant: React.FC<FormProps> = ({
       />
       <label> category</label>
       <select
+      multiple
         name="category"
         id="category"
         value={formData.category}
@@ -228,23 +214,22 @@ const Merchant: React.FC<FormProps> = ({
         onChange={(event) => {handleInputChange(event, "logo")}}
       />
       <label>Critical Account</label>
-    
       Yes <input
   type="checkbox"
   id="criticalAccountYes"
   name="criticalAccountYes"
- value = " "
- checked={formData.criticalAccountYes.length<0}
-  onChange={(event) => handleCriticalAccountYesChange(event)}
+ value = {formData.criticalAccount}
+ checked={true}
+  onChange={(event) => {handleInputChange(event,"yes")}}
 />
-No <input
+{/* No <input
   type="checkbox"
   id="criticalAccountNo"
   name="criticalAccountNo"
   value = " "
  checked = {formData.criticalAccountNo.length<0}
   onChange={(event) => handleCriticalAccountNoChange(event)}
-/>
+/> */}
  <label htmlFor="Payment">Payment</label>
       <select
         name="payment"
@@ -262,10 +247,8 @@ No <input
         // onClick={editIndex !== null ? handleEditSubmit : AddPerson}
       />
     </form>
-    <App/>
+    {/* <App/> */}
     </div>
-   
-
   );
 };
 export default Merchant;
