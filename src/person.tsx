@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Merchant from "./form";
 import Table from "./table";
 import Filter from "./filter";
 import "./merchant.css";
 import axios from "axios";
+import { error } from "console";
 
-axios.defaults.baseURL = "http://localhost:3010/";
+axios.defaults.baseURL = "http://localhost:3010/persons";
 
 export interface Person {
   name: string;
@@ -56,6 +57,18 @@ const App = () => {
     event.preventDefault();
     setIsFiltermode(true);
   };
+
+useEffect(()=>{
+  axios.get('/')
+  .then((response)=>{
+    setPersons(response.data);
+  })
+  .catch((error)=>{
+    console.error('Error in Fetching Data',error);
+  })
+},[]);
+
+
   const Backtoform = (event: React.FormEvent) => {
     event.preventDefault();
     setIsFiltermode(false);
@@ -149,11 +162,11 @@ const App = () => {
   };
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-  
+    console.log('Data Transfered Successfully',newPerson)
     // Check if in edit mode
     if (editIndex !== null) {
       // If in edit mode, call handleEditSubmit for edit operation with newPerson
-      axios.put(`/api/persons/${editFormData?._id}`, newPerson)
+      axios.put(`http://localhost:3010/persons/${editFormData?._id}`, newPerson)
         .then((response) => {
           const updatedPersons = [...persons];
           updatedPersons[editIndex] = response.data;
@@ -161,13 +174,14 @@ const App = () => {
           setEditIndex(null);
           setEditFormData(null);
           setSelectedType('');
+          console.log("Data edited successfully")
         })
         .catch((error) => {
           console.error('Error editing person:', error);
         });
     } else {
       // If not in edit mode, add the new person to the state after a successful POST request
-      axios.post('/api/persons', newPerson)
+      axios.post('http://localhost:3010/persons', newPerson)
         .then((response) => {
           setPersons((prevPersons) => [...prevPersons, response.data]);
           console.log('Data added successfully');
@@ -220,12 +234,12 @@ const App = () => {
   if (confirmDelete) {
     const personToDelete = persons[index];
 
-    axios.delete(`/api/persons/${personToDelete._id}`)
+    axios.delete(`http://localhost:3010/persons/${personToDelete._id}`)
       .then(() => {
         const updatedPersons = [...persons];
         updatedPersons.splice(index, 1);
         setPersons(updatedPersons);
-        console.log("deleted successfully")
+        console.log("Data deleted successfully")
       })
       .catch((error) => {
         console.error('Error deleting person:', error);

@@ -46,29 +46,7 @@ const Merchant: React.FC<FormProps> = ({
   handleEditSubmit,
   handleFormSubmit
 }) => {
-//  const handleCriticalAccountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setCriticalAccount(event.target.checked);
-//   };
-  // const handleFormSubmit = (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   if (editIndex !== null) {
-  //     handleEditSubmit(editIndex,formData);
-  //   } else {
-  //     AddPerson(event); // Call AddPerson for new person submission
-  //   }
-  //   }
-    // const handleSubmit = async (event:React.FormEvent) => {
-    //   event.preventDefault();
-    //   try {
-    //     // Make a POST request to your backend endpoint
-    //     const response = await axios.post('http://localhost:3005/', formData);
-    //     // Handle the response, update state, etc.
-    //     console.log('Data sent successfully:', response.data);
-    //   } catch (error) {
-    //     // Handle errors (e.g., network error, server error)
-    //     console.error('Error sending data:', error);
-    //   }
-    // };
+
   return (
 <div>
     <h1 className='head' >Merchant Form</h1>
