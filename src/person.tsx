@@ -4,7 +4,7 @@ import Table from "./table";
 import Filter from "./filter";
 import "./merchant.css";
 import axios from "axios";
-import { error } from "console";
+
 
 axios.defaults.baseURL = "http://localhost:3010/persons";
 
@@ -99,67 +99,75 @@ useEffect(()=>{
     // criticalAccountNo: [],
     payment: [],
   });
+
+  const handlePaymentCheckboxChange = (value: string) => {
+    setFormData((prevData) => {
+      if (prevData.payment.includes(value)) {
+        // If the value is already in the array, remove it
+        return { ...prevData, payment: prevData.payment.filter((item) => item !== value) };
+      } else {
+        // If the value is not in the array, add it
+        return { ...prevData, payment: [...prevData.payment, value] };
+      }
+    });
+  };
+  
   const handleInputChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     field: string
   ) => {
     const { name, value, type } = event.target;
-    if (type === "checkbox") {
-      // For checkboxes, handle checked state directly
-      const checkbox = event.target as HTMLInputElement;
-      const updatedArray = checkbox.checked ? ["Yes"] : [];
+  
+    if (type === "radio") {
+      // For radio buttons, handle the selected value
       if (editIndex !== null) {
-        // If in edit mode, update the editFormData
-        setEditFormData((prevData) => {
-          return {
-            ...(prevData as Person),
-            [field]: updatedArray,
-          };
-        });
+        setEditFormData((prevData) => ({
+          ...(prevData as Person),
+          [field]: [value],
+        }));
       } else {
-        // Otherwise, update the regular formData
-        setFormData((prevData) => {
-          return {
-            ...prevData,
-            [field]: updatedArray,
-          };
-        });
+        setFormData((prevData) => ({
+          ...prevData,
+          [field]: [value],
+        }));
       }
     } else {
       // Handle other input types (text, select, textarea, number)
-      setFormData((prevData) => {
-        return {
-          ...prevData,
-          [name]: type === "number" ? parseInt(value, 10) : value,
-        };
-      });
-      // Create newPerson object with updated form data
-      const newPerson: Person = {
-        name: name === "name" ? value : formData.name,
-        email: name === "email" ? value : formData.email,
-        phone: name === "phone" ? parseInt(value, 10) : formData.phone,
-        website: name === "website" ? value : formData.website,
-        contact: name === "contact" ? value : formData.contact,
-        number: name === "number" ? parseInt(value, 10) : formData.number,
-        another: name === "another" ? value : formData.another,
-        notes: name === "notes" ? value : formData.notes,
-        type: name === "type" ? [value] : formData.type,
-        category: name === "category" ? [value] : formData.category,
-        commission: name === "commission" ? Number(value) : formData.commission,
-        date: name === "date" ? value : formData.date,
-        logo: name === "logo" ? value : formData.logo,
-        criticalAccount: name === "criticalAccount" ? ["yes"] : ["No"],
-        // criticalAccountNo: name === "criticalAccountNo" ? ["No"] : [],
-        payment: name === "payment" ? [value] : formData.payment,
-        [name]: type === "number" ? parseInt(value, 10) : value, // Parse number type inputs
-        // [field]: type === 'checkbox' ? (checked ? ['Yes'] : []) : [value], // Handle checkbox and other fields
-      };
-      // Set the newPerson state
-      setNewPerson(newPerson);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: type === "number" ? parseInt(value, 10) : value,
+      }));
     }
+
+const newPerson: Person = {
+  name: name === "name" ? value : formData.name,
+  email: name === "email" ? value : formData.email,
+  phone: name === "phone" ? parseInt(value, 10) : formData.phone,
+  website: name === "website" ? value : formData.website,
+  contact: name === "contact" ? value : formData.contact,
+  number: name === "number" ? parseInt(value, 10) : formData.number,
+  another: name === "another" ? value : formData.another,
+  notes: name === "notes" ? value : formData.notes,
+  type: name === "type" ? [value] : formData.type,
+  category: name === "category" ? [value] : formData.category,
+  commission: name === "commission" ? Number(value) : formData.commission,
+  date: name === "date" ? value : formData.date,
+  logo: name === "logo" ? value : formData.logo,
+  criticalAccount: name === "criticalAccount" ? [value] : formData.criticalAccount,
+  payment: name === "payment" ? [value] : formData.payment,
+  // ... Continue updating other fields as needed based on your form structure
+};
+
+// Set the newPerson state
+setNewPerson(newPerson);
+
+  
+    // Set the newPerson state
+    setNewPerson(newPerson);
   };
+  
+
+  
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log('Data Transfered Successfully',newPerson)
@@ -268,23 +276,13 @@ useEffect(()=>{
   };
   ;
   
-
-  // const handleEditSubmit = (index: number, editedPerson: Person) => {
-  //   // Update the persons state with the edited person at the specified index
-  //   const updatedPersons = [...persons];
-  //   updatedPersons[index] = editedPerson;
-  //   setPersons(updatedPersons);
-  //   // Reset edit state
-  //   setEditIndex(null);
-  //   setEditFormData(null);
-  //   setSelectedType("");
-  // };
   return (
     <div>
       <Merchant
         editIndex={editIndex}
         handleEditSubmit={handleEditSubmit}
         editFormData={editFormData}
+        handlePaymentCheckboxChange={handlePaymentCheckboxChange}
         formData={formData}
         selectedType={selectedType}
         handleInputChange={handleInputChange}

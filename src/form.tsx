@@ -24,6 +24,7 @@ interface FormProps {
   handleEditSubmit: (index: number, editedPerson: Person) => void
   formData: Person;
   selectedType: string;
+  handlePaymentCheckboxChange: (value: string) => void;
   handleInputChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     field: string
@@ -41,6 +42,7 @@ const Merchant: React.FC<FormProps> = ({
   formData,
   selectedType,
   handleInputChange,
+  handlePaymentCheckboxChange,
   setSelectedType,
   // setCriticalAccount,
   handleEditSubmit,
@@ -191,41 +193,65 @@ const Merchant: React.FC<FormProps> = ({
         value={formData.logo}
         onChange={(event) => {handleInputChange(event, "logo")}}
       />
-      <label>Critical Account</label>
-      Yes <input
-  type="checkbox"
-  id="criticalAccountYes"
-  name="criticalAccountYes"
- value = {formData.criticalAccount}
- checked={true}
-  onChange={(event) => {handleInputChange(event,"yes")}}
+      {/* Change the criticalAccount field in the form */}
+<label htmlFor="criticalAccountYes">Critical Account:</label>
+Yes<input
+        type="radio"
+        name="criticalAccount"
+        value="Yes"
+        checked={selectedType === "Yes"}
+        onChange={(event) => {
+          setSelectedType(event.target.value); // Update the selected type
+          handleInputChange(event, "criticalAccount"); // Handle form input change
+        }}
+      />
+
+No<input
+  type="radio"
+  name="criticalAccount"
+  value="No"
+  checked={selectedType === "No"}
+  onChange={(event) =>{ setSelectedType(event.target.value);
+   handleInputChange(event, "criticalAccount")}}
 />
-{/* No <input
+
+ {/* Change the payment field in the form */}
+<label htmlFor="payment">Payment:</label>
+
+Cash Payment<input
   type="checkbox"
-  id="criticalAccountNo"
-  name="criticalAccountNo"
-  value = " "
- checked = {formData.criticalAccountNo.length<0}
-  onChange={(event) => handleCriticalAccountNoChange(event)}
-/> */}
- <label htmlFor="Payment">Payment</label>
-      <select
-        name="payment"
-        id="payment"
-        value={formData.payment}
-        onChange={(event) => {handleInputChange(event, "payment")}}
-      >
-        <option value="cash">Cash on Payment</option>
-        <option value="upi">UPI</option>
-        <option value="card">Card on payment</option>
-      </select>
-      <input
+  id="paymentCash"
+  name="paymentCash"
+  value="Cash on Payment"
+  checked={formData.payment.includes("Cash on Payment")}
+  onChange={(event) => handlePaymentCheckboxChange(event.target.value)}
+/>
+
+
+UPI Payment<input
+  type="checkbox"
+  id="paymentUPI"
+  name="paymentUPI"
+  value="UPI"
+  checked={formData.payment.includes("UPI")}
+  onChange={(event) => handlePaymentCheckboxChange(event.target.value)}
+/>
+
+Card Payment<input
+  type="checkbox"
+  id="paymentCard"
+  name="paymentCard"
+  value="Card on payment"
+  checked={formData.payment.includes("Card on payment")}
+  onChange={(event) => handlePaymentCheckboxChange(event.target.value)}
+/> <br />
+
+ <input
         type="submit"
         value={editIndex !== null ? "Edit" : "Submit"}
-        // onClick={editIndex !== null ? handleEditSubmit : AddPerson}
       />
     </form>
-    {/* <App/> */}
+
     </div>
   );
 };

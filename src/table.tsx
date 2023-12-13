@@ -28,12 +28,7 @@ interface TableProps {
 const Table:React.FC<TableProps> =({ persons, handleDelete, handleEdit, handleEditSubmit, handleFormSubmit })=> {
     const [isFilterMode,] = useState(false);
     const [FilteredPersons, ] = useState<Person[]>([]);
-    // function handleDelete(index: number): void {
-    //     throw new Error("Function not implemented.");
-    // }
-    // function handleEdit(index: number): void {
-    //     throw new Error("Function not implemented.");
-    // }
+  
     const handleEditClick = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
         event.preventDefault(); // Prevent default button click behavior
         handleEdit(index);
@@ -80,7 +75,7 @@ const Table:React.FC<TableProps> =({ persons, handleDelete, handleEdit, handleEd
               <td>{p.commission}</td>
               <td>{p.date}</td>
               <td>{p.criticalAccount ? "Yes" : "No"}</td>
-              <td>{p.payment}</td>
+              <td>{Array.isArray(p.payment) ? p.payment.join(", ") : p.payment}</td>
              <tr> <td>
               <button onClick={(event) => handleEditClick(event, index)} >Edit</button>
               </td></tr>
